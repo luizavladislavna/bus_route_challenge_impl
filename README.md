@@ -16,7 +16,9 @@ _3. _
 Package:
 
     $ git clone https://github.com/sealTLV/bus_route_challenge_impl.git
-    $ mvn clean compile package -Dmaven.test.skip=true
+    $ cd bus_route_challenge_impl
+    $ build.sh
+    $ java -jar target/bus-route-0.0.1.jar "tests\docker\example"
 
 Run:
 

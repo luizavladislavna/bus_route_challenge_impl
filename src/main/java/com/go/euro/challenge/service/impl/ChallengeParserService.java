@@ -53,7 +53,7 @@ public class ChallengeParserService implements ParserService {
         requireNonNull(filePath);
         if (!Files.isReadable(filePath)) {
             throw new ApplicationDefaultException(
-                    String.format("Not enough permissions for reading file: %s", filePath));
+                    String.format("Can't read file: %s. Check file path and access", filePath));
         }
         return fileProcessor(filePath);
     }

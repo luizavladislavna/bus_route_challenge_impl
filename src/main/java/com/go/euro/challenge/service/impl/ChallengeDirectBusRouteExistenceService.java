@@ -1,7 +1,6 @@
 package com.go.euro.challenge.service.impl;
 
 import com.go.euro.challenge.entity.exception.AppInvalidParametersException;
-import com.go.euro.challenge.entity.exception.AppUnknownStationsException;
 import com.go.euro.challenge.entity.response.DirectBusRoute;
 import com.go.euro.challenge.repository.RouteStationRepository;
 import com.go.euro.challenge.service.DirectBusRouteExistenceService;
@@ -23,35 +22,39 @@ import static java.util.Objects.nonNull;
 @Accessors(fluent = true)
 public class ChallengeDirectBusRouteExistenceService implements DirectBusRouteExistenceService {
 
-	@Autowired @Getter
-	RouteStationRepository repository;
+    @Autowired
+    @Getter
+    RouteStationRepository repository;
 
-	@Override
-	public DirectBusRoute getDirectBusRouteExistence (Integer from, Integer to) {
-		vilidateStations(from, to);
-		boolean direct_route =
-				repository.stationRoutes().get(from)
-						.parallelStream()
-						.filter(routeID -> repository.routeStations().get(routeID).contains(to))
-						.findFirst()
-						.isPresent();
-		log.debug("direct_route: {};", direct_route);
-		return DirectBusRoute.of(from, to, direct_route);
-	}
+    @Override
+    public DirectBusRoute getDirectBusRouteExistence(Integer from, Integer to) {
+        if(!vilidateStations(from, to)){
+            return DirectBusRoute.of(from, to, false);
+        }
+        boolean direct_route =
+                repository.stationRoutes().get(from)
+                        .parallelStream()
+                        .filter(routeID -> repository.routeStations().get(routeID).contains(to))
+                        .findFirst()
+                        .isPresent();
+        log.debug("direct_route: {};", direct_route);
+        return DirectBusRoute.of(from, to, direct_route);
+    }
 
-	@Override
-	public boolean vilidateStations (Integer from, Integer to) {
+    @Override
+    public boolean vilidateStations(Integer from, Integer to) {
 
-		if (nonNull(from) && nonNull(to)) {
+        if (nonNull(from) && nonNull(to)) {
 
-			if(from.compareTo(to)==0){
-				throw new AppInvalidParametersException();
-			}
+            if (from.compareTo(to) == 0) {
+                throw new AppInvalidParametersException();
+            }
 
-			boolean fromExist = repository.stationRoutes().containsKey(from);
-			boolean toExist = repository.stationRoutes().containsKey(to);
-			log.debug("fromExist: {}; toExist: {}", fromExist, toExist);
-
+            boolean fromExist = repository.stationRoutes().containsKey(from);
+            boolean toExist = repository.stationRoutes().containsKey(to);
+            log.debug("fromExist: {}; toExist: {}", fromExist, toExist);
+            return fromExist && toExist;
+            /*
 			if (!fromExist && !toExist) {
 				throw new AppUnknownStationsException(from, to);
 			} else if (!fromExist) {
@@ -60,9 +63,9 @@ public class ChallengeDirectBusRouteExistenceService implements DirectBusRouteEx
 				throw new AppUnknownStationsException(to);
 			}
 			return true;
-
-		} else {
-			throw new AppInvalidParametersException();
-		}
-	}
+			*/
+        } else {
+            throw new AppInvalidParametersException();
+        }
+    }
 }
