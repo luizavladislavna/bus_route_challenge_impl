@@ -16,7 +16,7 @@ import static java.util.Objects.nonNull;
 /**
  * Created by tymoshenkol on 10-Nov-16.
  */
-@Service(value = "challenge")
+@Service
 @Slf4j
 @AllArgsConstructor
 @Accessors(fluent = true)

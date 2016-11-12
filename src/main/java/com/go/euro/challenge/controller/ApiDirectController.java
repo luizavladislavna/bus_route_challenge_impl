@@ -25,7 +25,6 @@ import javax.xml.ws.Response;
 public class ApiDirectController {
 
 	@Autowired
-	@Qualifier("challenge")
 	DirectBusRouteExistenceService directRouteService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

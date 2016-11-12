@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,11 +29,11 @@ import static java.util.Objects.requireNonNull;
 /**
  * Created by tymoshenkol on 10-Nov-16.
  */
-@Component
+@Service(value = "default")
 @Slf4j
 @Accessors(fluent = true)
 @Setter
-public class ChallengeParserService implements ParserService {
+public class DefaultParserService implements ParserService {
 
     @Autowired
     ChallengeDirectConfig cfg;
@@ -58,7 +59,7 @@ public class ChallengeParserService implements ParserService {
         return fileProcessor(filePath);
     }
 
-    private boolean fileProcessor(Path path) {
+    protected boolean fileProcessor(Path path) {
         boolean success = false;
         log.warn("read_from:\t{}", LocalDateTime.now());
         try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
@@ -71,7 +72,7 @@ public class ChallengeParserService implements ParserService {
         return success;
     }
 
-    private void processFileRow(String row) {
+    protected void processFileRow(String row) {
         if (!row.trim().isEmpty()) {
             String[] ids = row.trim().split(" ");
             cfg.checkRouteStationsCounter(ids.length - 1);
@@ -111,13 +112,13 @@ public class ChallengeParserService implements ParserService {
         }
     }
 
-    private void checkRepositoryAfterLoad(Integer routesCounter) {
+    protected void checkRepositoryAfterLoad(Integer routesCounter) {
         cfg.checkRoutesCounter(repository.routeStations().size(), routesCounter.intValue());
         cfg.checkStationsCounters(repository.stationRoutes().size());
         repository.show();
     }
 
-    private Integer processFirstLine(String first) {
+    protected Integer processFirstLine(String first) {
         log.info("config: {}", cfg);
         Integer counter = Integer.valueOf(first.trim());
         log.debug("counter from first line = {}", counter);
