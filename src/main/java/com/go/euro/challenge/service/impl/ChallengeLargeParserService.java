@@ -25,7 +25,6 @@ public class ChallengeLargeParserService extends DefaultParserService {
 
     @Override
     protected boolean fileProcessor(Path path) {
-        boolean success = false;
         log.warn("read_from:\t{}", LocalDateTime.now());
         try {
             LineIterator iterator = FileUtils.lineIterator(path.toFile());
@@ -38,14 +37,14 @@ public class ChallengeLargeParserService extends DefaultParserService {
                 }
 
                 checkRepositoryAfterLoad(routesCounter);
+
+                log.warn("read_to:\t{}", LocalDateTime.now());
+                return true;
             } else {
                 throw new ApplicationDefaultException("Empty file!");
             }
         } catch (IOException e) {
             throw new AppReadFileException(path.toString(), e);
         }
-
-        log.warn("read_to:\t{}", LocalDateTime.now());
-        return success;
     }
 }
