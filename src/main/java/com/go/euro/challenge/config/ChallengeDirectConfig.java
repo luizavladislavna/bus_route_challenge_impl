@@ -1,9 +1,6 @@
 package com.go.euro.challenge.config;
 
-import com.go.euro.challenge.entity.exception.AppMaxRouteStationsException;
-import com.go.euro.challenge.entity.exception.AppMaxRoutesException;
-import com.go.euro.challenge.entity.exception.AppMaxStationsException;
-import com.go.euro.challenge.entity.exception.AppMinRouteStationsException;
+import com.go.euro.challenge.entity.exception.*;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -30,15 +27,22 @@ public class ChallengeDirectConfig {
 		}
 	}
 
-	public void checkStationsCounters (int count) {
-		if (count > maxRoutes) {
-			throw new AppMaxStationsException(maxRoutes, count);
+	public void checkStationsCounters(int count) {
+		if (count > maxStations) {
+			throw new AppMaxStationsException(maxStations, count);
 		}
 	}
 
+	public void checkRoutesCounter(int count, int routesCounter) {
+		if(count != routesCounter){
+			throw new AppUnexpectedSizeStationsException(routesCounter, count);
+		}
+		checkRoutesCounter(count);
+	}
+
 	public void checkRoutesCounter (int count) {
-		if (count > maxStations) {
-			throw new AppMaxRoutesException(maxStations, count);
+		if (count > maxRoutes) {
+			throw new AppMaxRoutesException(maxRoutes, count);
 		}
 	}
 

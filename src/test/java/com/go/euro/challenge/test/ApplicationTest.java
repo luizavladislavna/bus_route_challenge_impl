@@ -1,6 +1,8 @@
 package com.go.euro.challenge.test;
 
 import com.go.euro.challenge.Application;
+import com.go.euro.challenge.entity.exception.ExitException;
+import com.go.euro.challenge.test.util.TestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,6 +11,7 @@ import org.springframework.boot.test.rule.OutputCapture;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -40,12 +43,17 @@ public class ApplicationTest {
     }
 
     @Test
-    public void okFile() throws FileNotFoundException {
-        String target = getClass().getClassLoader().getResource("testData").getPath();
-        assertThat(target).isNotNull();
-        String output = testCommandLineRun(new File(target).getPath(), "READY TO GO");
+    public void okFile() throws FileNotFoundException, URISyntaxException {
+        String output = testCommandLineRun(TestUtil.resourceToPath("testData"),
+                "READY TO GO");
         assertThat(output).contains("Unique routes:\t10");
         assertThat(output).contains("Unique stations:\t24");
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void errorSizeFile() throws FileNotFoundException, URISyntaxException {
+        log.debug("file: {}", TestUtil.resourceToPath("errorData"));
+        testCommandLineRun(TestUtil.resourceToPath("errorData"),
+                "EXIT: There is incorrect number N of routes. Expected is 10, and there is 12");
+    }
 }

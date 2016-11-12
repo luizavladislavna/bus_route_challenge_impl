@@ -102,18 +102,18 @@ public class ChallengeParserService implements ParserService {
     void bufferedReaderProcessor(BufferedReader br) {
         try {
             String firstLine = br.readLine();
-            processFirstLine(firstLine);
+            Integer routesCounter = processFirstLine(firstLine);
             Stream<String> stream = br.lines().onClose(FilesUtil.asUncheckedRunnable(br));
             stream.parallel().forEach(s -> processFileRow(s));
-            checkRepositoryAfterLoad();
+            checkRepositoryAfterLoad(routesCounter);
         } catch (IOException e) {
             throw new ApplicationDefaultException(e.getMessage());
         }
     }
 
-    private void checkRepositoryAfterLoad() {
-        cfg.checkStationsCounters(repository.routeStations().size());
-        cfg.checkRoutesCounter(repository.stationRoutes().size());
+    private void checkRepositoryAfterLoad(Integer routesCounter) {
+        cfg.checkRoutesCounter(repository.routeStations().size(), routesCounter.intValue());
+        cfg.checkStationsCounters(repository.stationRoutes().size());
         repository.show();
     }
 

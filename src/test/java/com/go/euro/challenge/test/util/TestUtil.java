@@ -5,7 +5,10 @@ import com.google.common.base.Joiner;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -67,5 +70,10 @@ public class TestUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String resourceToPath(String srcPath) throws URISyntaxException {
+        URI uri =  ClassLoader.getSystemResource(srcPath).toURI();
+        return new File(uri).getAbsolutePath();
     }
 }
