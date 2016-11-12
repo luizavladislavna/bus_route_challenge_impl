@@ -7,11 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.test.rule.OutputCapture;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.TestPropertySource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -25,10 +30,14 @@ public class ApplicationTest {
     public OutputCapture outputCapture = new OutputCapture();
 
     private String testCommandLineRun(String file, String expected) {
-        SpringApplication.run(Application.class, new String[]{file});
+        ConfigurableApplicationContext ctx = new SpringApplicationBuilder()
+                .sources(Application.class)
+                .run(new String[]{file});
+        assertThat(ctx).isNotNull();
         String output = outputCapture.toString();
         assertThat(output).contains(expected);
         outputCapture.flush();
+        ctx.close();
         return output;
     }
 
