@@ -12,6 +12,7 @@ _2. There was implemented **Inverted index** data structure for storing a mappin
 
 _3. According to **simple_test.sh**: if stations A or B unknown - there might be 'false'._
 
+_4. TODO: implement distributed cache _
 
 Package:
 

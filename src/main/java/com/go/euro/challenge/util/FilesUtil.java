@@ -36,7 +36,7 @@ public class FilesUtil {
 	public static void bufferedRead (BufferedReader br, Consumer<BufferedReader> function) {
 		try {
 			function.accept(br);
-		} catch (Error | RuntimeException e) {
+		} catch (RuntimeException e) {
 			try {
 				br.close();
 			} catch (IOException ex) {

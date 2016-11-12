@@ -99,7 +99,7 @@ public class ChallengeParserService implements ParserService {
         repository.stationRoutes().get(stationId).add(routeId);
     }
 
-    void bufferedReaderProcessor(BufferedReader br) {
+    private void bufferedReaderProcessor(BufferedReader br) {
         try {
             String firstLine = br.readLine();
             Integer routesCounter = processFirstLine(firstLine);
