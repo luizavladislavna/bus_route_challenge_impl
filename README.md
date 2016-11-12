@@ -10,7 +10,7 @@ _In case if it is not: we have to change architecture for stored in memory data.
 
 _2. There was implemented **Inverted index** data structure for storing a mapping between routes and stations._
 
-_3. _
+_3. According to **simple_test.sh**: if stations A or B unknown - there might be 'false'._
 
 
 Package:
